@@ -11,6 +11,7 @@ const router = Router();
 //Crear cuenta de usuario
 router.post('/', [
     check('username', 'El nombre de usuario debe ser de 5 a 15 caracteres').isLength({ min: 5, max: 15 }).custom(existUser),
+    check('foto', 'Es obligatorio usar una fotografia').notEmpty(),
     check('correo', 'Formato de correo no valido').isEmail().custom(existEmail),
     check('password', 'La contraseña debe ser de de 6 a 15 caracteres').isLength({ min: 5, max: 15 }),
     check('edad', 'Formato de edad invalido').isNumeric(),
