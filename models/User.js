@@ -7,10 +7,6 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: [true, 'username is required'],
         unique: true
-    }, /* agregue fotoPerfi*/fotoPerfil:{
-        type: String,
-        required: [true, 'fotoPerfil is required'],
-        unique: false
     },
     correo: {
         type: String,
