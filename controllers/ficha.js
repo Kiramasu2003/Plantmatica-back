@@ -6,7 +6,6 @@ const User = require('../models/User');
 const crearFicha = async (req, res) => {
 
     let {
-        /* agregue imagenes*/imagenes,
         etiquetas,
         nombre_comun,
         nombre_cientifico,
@@ -33,11 +32,7 @@ const crearFicha = async (req, res) => {
     }); */
     //etiquetas = arrayIdEtiquetas;
 
-    // let foto= input_foto.src;  es el url que Cloudinary pone por 
-    //defecto, esto es para obtenerla del html
-
     const ficha = new Ficha({
-        /* agregue imagenes*/imagenes,
         etiquetas,
         nombre_comun,
         nombre_cientifico,
@@ -66,9 +61,6 @@ const guardarEtiquetasBD = async (etiquetas, nombreCo, nombreCien) => {
 
     let etiquetaFor;
     let existenciaEtiqueta;
-
-    
-
     etiquetas.push(nombreCo);
     etiquetas.push(nombreCien)
     etiquetas.forEach(async e => {
@@ -91,7 +83,7 @@ const guardarEtiquetasBD = async (etiquetas, nombreCo, nombreCien) => {
 const getFichaId = async (req, res) => {
 
     const { id } = req.params;
-    const ficha = await Ficha.findById(id);
+    const ficha = await Ficha.findById(id).populate("comentarios.id_usuario", 'username');
 
     res.json({
         ficha
@@ -120,8 +112,8 @@ const conseguirFichasDeUsuario = async (req, res) => {
     const { id } = req.params;
     //const fichas = await Ficha.find({ "datos_creacion.usuario_creo": id  });
     const [total, fichas] = await Promise.all([
-        Ficha.countDocuments({ "datos_creacion.usuario_creo": id  }),
-        Ficha.find({ "datos_creacion.usuario_creo": id  })
+        Ficha.countDocuments({ "datos_creacion.usuario_creo": id }),
+        Ficha.find({ "datos_creacion.usuario_creo": id })
     ])
 
     res.json({
@@ -151,7 +143,7 @@ const guardarFicha = async (req, res) => {
 const conseguirFichasGuardadasUsuario = async (req, res) => {
 
     const { id_user } = req.params;
-    
+
     const fichas_guardadas = await User.findById(id_user).populate('fichas_guardadas');
 
     res.json({
@@ -170,7 +162,7 @@ const eliminarFichaGuardada = async (req, res) => {
             'fichas_guardadas': id
         }
     });
-    
+
     res.json({
         msg: 'Se a eliminado correctamente la ficha de tus guardados.'
     });

@@ -77,7 +77,8 @@ const FichaSchema = mongoose.Schema({
         {
             id_usuario: {
                 type: mongoose.Schema.Types.ObjectId,
-                required: true
+                required: true,
+                ref: 'User'
             },
             comentario: {
                 type: String,
