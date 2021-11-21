@@ -2,7 +2,7 @@
 //NOTA: SE REUSAN ALGUNOS CONTROLADORES DE FICHA Y USUARIO
 const { Router } = require('express');
 const { check } = require('express-validator');
-const { getUsuarios, fichasNoAceptadas, manipularSolicitudAgregar, todasLasFichaschsm, manipularSolicitudEdicion, getSolicitudes, eliminarFichaDefinitivamente } = require('../controllers/admin');
+const { getUsuarios, fichasNoAceptadas, manipularSolicitudAgregar, todasLasFichaschsm, manipularSolicitudEdicion, getSolicitudes, eliminarFichaDefinitivamente, validarAdministrador } = require('../controllers/admin');
 const { getFichaId } = require('../controllers/ficha');
 //Controladores
 const { existEmail, existUser, validS, validResidencia, existeUserID, existeAdminID } = require('../helpers/validar-datos-user');
@@ -13,7 +13,12 @@ const { validarJWT } = require('../middlewares/validar-jwt');
 const { adminRole } = require('../middlewares/validar-roles');
 const router = Router();
 
-//Validar que es administrador -- Pendiente
+//Validar que es administrador 
+router.put('/valid', [
+    validarJWT,
+    adminRole,
+    validarDatos
+], validarAdministrador);
 
 /* Aceptar o rechazar solicitud de edicion */
 router.put('/solicitud/:id/:control', [
