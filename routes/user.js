@@ -45,12 +45,13 @@ router.put('/:id', [
     validarJWT,
     check('id', 'Ocurrio un error').isMongoId(),
     check('id', 'Ocurrio un error').custom(existeUserID),
+    check('foto', 'Ocurrio un error').notEmpty(),
     check('password', 'Es obligatorio introducir la contraseña').notEmpty(),
     check('sexo', 'Dato no valido').custom(validS),
     check('edad', 'Edad no valida').isInt(),
     check('estadoMx', 'Estado de residencia no valido').custom(validResidencia),
     validarDatos
-], actualizarDatosUsuario )
+], actualizarDatosUsuario)
 
 
 module.exports = router;
