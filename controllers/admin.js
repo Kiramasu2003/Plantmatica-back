@@ -3,16 +3,6 @@ const User = require('../models/User');
 const Ficha = require('../models/FichaPlanta');
 const Solicitud = require('../models/SolicitudEdicion');
 
-const validarAdministrador = async (req, res) => {
-    const { token } = req.body;
-    const { uid } = jwt.verify(token, process.env.SECRETORPUBLICKEY);
-    const admin = await User.findOne({ code: uid });
-    res.json({
-        admin: true,
-        adminID: admin._id
-    })
-}
-
 /* Una por una y se require el ID */
 const manipularSolicitudEdicion = async (req, res) => {
 
@@ -180,6 +170,5 @@ module.exports = {
     todasLasFichaschsm,
     manipularSolicitudEdicion,
     getSolicitudes,
-    eliminarFichaDefinitivamente,
-    validarAdministrador
+    eliminarFichaDefinitivamente
 }
