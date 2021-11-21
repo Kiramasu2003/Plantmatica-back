@@ -2,6 +2,7 @@
 const User = require('../models/User');
 const Ficha = require('../models/FichaPlanta');
 const Solicitud = require('../models/SolicitudEdicion');
+const jwt = require('jsonwebtoken');
 
 const validarAdministrador = async (req, res) => {
     const { token } = req.body;
