@@ -6,7 +6,6 @@ const User = require('../models/User');
 const crearFicha = async (req, res) => {
 
     let {
-        /* agregue imagenes*/imagenes,
         etiquetas,
         nombre_comun,
         nombre_cientifico,
@@ -33,11 +32,7 @@ const crearFicha = async (req, res) => {
     }); */
     //etiquetas = arrayIdEtiquetas;
 
-    // let foto= input_foto.src;  es el url que Cloudinary pone por 
-    //defecto, esto es para obtenerla del html
-
     const ficha = new Ficha({
-        /* agregue imagenes*/imagenes,
         etiquetas,
         nombre_comun,
         nombre_cientifico,
@@ -66,9 +61,6 @@ const guardarEtiquetasBD = async (etiquetas, nombreCo, nombreCien) => {
 
     let etiquetaFor;
     let existenciaEtiqueta;
-
-    
-
     etiquetas.push(nombreCo);
     etiquetas.push(nombreCien)
     etiquetas.forEach(async e => {

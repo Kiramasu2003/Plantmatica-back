@@ -14,7 +14,6 @@ const router = Router();
 router.post('/', [
     validarJWT,
     //check('etiquetas').custom(validarEtiquetas),
-    check('imagenes', 'Es obligatorio que la ficha tenga una img como referencia').notEmpty(),
     check('complemento', 'El complemento no puede ir vacio').notEmpty(),
     check('nombre_comun', 'El nombre comun es obligatorio').notEmpty().custom(validarExistNombreComun),
     check('nombre_cientifico', 'El nombre cientifico es obligatorio').notEmpty().custom(validarExistNombreCientifico),
@@ -69,6 +68,6 @@ router.get('/buscar/etiquetas', getEtiquetas);
 router.put('/encontrar/coincidencia/', [
     check('termino', 'El termino de busqueda no puede ir vacio').notEmpty(),
     validarDatos
-], buscarCoincidencias);
+],  buscarCoincidencias);
 
 module.exports = router;

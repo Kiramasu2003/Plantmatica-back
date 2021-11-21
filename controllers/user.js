@@ -9,11 +9,11 @@ const jwt = require('jsonwebtoken');
 const crearCuenta = async (req, res) => {
 
     try {
-        const { username,/* agregue fotoPerfi*/ fotoPerfil, correo, password, estadoMx, sexo, edad } = req.body;
+        const { username, correo, password, estadoMx, sexo, edad } = req.body;
 
         //generar codigo
         const code = uuidv4();
-        const user = new User({ username,/* agregue fotoPerfi*/ fotoPerfil, correo, password, estadoMx, sexo, edad, code });
+        const user = new User({ username, correo, password, estadoMx, sexo, edad, code });
 
         /* Generar webToken */
         const token = await generarJWT(code);
@@ -48,7 +48,7 @@ const crearCuenta = async (req, res) => {
 const actualizarDatosUsuario = async (req, res) => {
 
     const { id } = req.params;
-    const { _id, correo,/* agregue fotoPerfi*/ fotoPerfil, password, state, rol, reportes, ...dataResto } = req.body;
+    const { _id, correo, password, state, rol, reportes, ...dataResto } = req.body;
 
     const usuario = await User.findById(id);
     if (!usuario) {

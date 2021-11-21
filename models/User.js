@@ -8,11 +8,6 @@ const UserSchema = mongoose.Schema({
         required: [true, 'username is required'],
         unique: true
     },
-    foto: {
-        type: String,
-        required: [true, 'foto is required'],
-        unique: false
-    },
     correo: {
         type: String,
         required: [true, 'El correo es obligatorio'],
