@@ -14,6 +14,18 @@ const validarEtiquetas = (etiquetas) => {
 
 }
 
+const validarImagen = (imagen) => {
+
+    if (imagen.length < 1) {
+        throw new Error(`Debe tener una foto de referencia.`);
+    }
+
+    if (etiquetas.length > 1) {
+        throw new Error(`Unicamente se necesita una imagen.`);
+    }
+
+}
+
 const validarExistNombreComun = async (nombre_comun) => {
 
     const existe = await FichaPlanta.findOne({ nombre_comun });

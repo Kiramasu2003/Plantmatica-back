@@ -11,7 +11,7 @@ const router = Router();
 //Crear cuenta de usuario
 router.post('/', [
     check('username', 'El nombre de usuario debe ser de 5 a 15 caracteres').isLength({ min: 5, max: 15 }).custom(existUser),
-    check('foto', 'Es obligatorio usar una fotografia').notEmpty(),
+    check('foto', 'Es obligatorio usar una fotografia').isString({ min: 1, max: 50 }),
     check('correo', 'Formato de correo no valido').isEmail().custom(existEmail),
     check('password', 'La contraseña debe ser de de 6 a 15 caracteres').isLength({ min: 5, max: 15 }),
     check('edad', 'Formato de edad invalido').isNumeric(),
@@ -46,7 +46,7 @@ router.put('/:id', [
     validarJWT,
     check('id', 'Ocurrio un error').isMongoId(),
     check('id', 'Ocurrio un error').custom(existeUserID),
-    check('foto', 'Ocurrio un error').notEmpty(),
+    check('foto', 'Ocurrio un error').isString({ min: 1, max: 50 }),
     check('password', 'Es obligatorio introducir la contraseña').notEmpty(),
     check('sexo', 'Dato no valido').custom(validS),
     check('edad', 'Edad no valida').isInt(),
