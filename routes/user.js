@@ -3,7 +3,7 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 //Controladores
 const { crearCuenta, getUsuario, deleteUsuario, actualizarDatosUsuario, confirm, confirmarCrearCuenta } = require('../controllers/user');
-const { existEmail, existUser, validS, validResidencia, existeUserID } = require('../helpers/validar-datos-user');
+const { /*existEmail,*/ existUser, validS, validResidencia, existeUserID } = require('../helpers/validar-datos-user');
 const { validarDatos } = require('../middlewares/validar');
 const { validarJWT } = require('../middlewares/validar-jwt');
 const router = Router();

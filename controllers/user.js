@@ -1,7 +1,7 @@
 const bcryptjs = require('bcryptjs');
 const { v4: uuidv4 } = require('uuid');
 const { generarJWT } = require('../config/jwt');
-const { getTemplate, sendEmail } = require('../config/mail');
+//const { getTemplate, sendEmail } = require('../config/mail');
 const { validarJWT } = require('../middlewares/validar-jwt');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
@@ -77,13 +77,13 @@ const crearCuenta = async (req, res) => {
 
         /* Obtener template */
         const template = getTemplate(username, token);
-
+        /*
         try {
-            /* Enviar email */
-            await sendEmail(correo, 'Correo de verificacion', template);
+            /* Enviar email 
+                        await sendEmail(correo, 'Correo de verificacion', template);
         } catch (error) {
             console.log(error)
-        }
+        }*/
 
         const salt = bcryptjs.genSaltSync();
         user.password = bcryptjs.hashSync(password, salt);

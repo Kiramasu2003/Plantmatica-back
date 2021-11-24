@@ -1,4 +1,3 @@
-const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 
 const generarJWT = (uid = '') => {
