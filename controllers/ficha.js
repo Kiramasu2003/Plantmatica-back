@@ -2,10 +2,73 @@
 const Ficha = require('../models/FichaPlanta');
 const Etiqueta = require('../models/Etiquetas');
 const User = require('../models/User');
+const cloudinary = require('cloudinary').v2;// .v2 =version 2
+const { response } = require('express');
+
+cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_KEY,
+    api_secret: process.env.CLOUDINARY_SECRET,
+    secure: true
+});
+
+/*const cargarArchivo = (req, res = response) => {
+
+    if (!req.files || Object.keys(req.files).length === 0 || !req.files.archivo) {
+        res.status(400).json({ msg: 'No files were uploaded.' });
+        return;
+    }
+
+    const { archivo } = req.files;
+
+    const uploadPath = path.join(__dirname, '../uploads/', archivo.name);
+
+    archivo.mv(uploadPath, (err) => {
+        if (err) {
+            return res.status(500).json({ msg: "err" });
+        }
+
+        res.json({ msg: 'File uploaded to ' + uploadPath })
+    });
+}*/
+
+const actualizarImg = async (req, res) => {
+
+    const { id } = req.params;
+
+    let arrayImg = [];
+    try {
+        //ficha.imagenes
+
+        const { tempFilePath } = req.files.archivo;
+        const { secure_url } = await cloudinary.uploader.upload(tempFilePath);
+        console.log(secure_url);
+        arrayImg.push(secure_url);
+
+
+        Ficha.imagenes = arrayImg;
+        await Ficha.findByIdAndUpdate(id, {
+            $push: {
+                'imagenes': arrayImg
+
+            }
+        })
+
+        res.json({
+            msg: 'img agregada correctamente'
+        });
+    } catch (error) {
+        res.json({
+            msg: 'img no fue agregada, hay un error',
+            err: error.msg
+        })
+    }
+}
 
 const crearFicha = async (req, res) => {
 
     let {
+        imagenes,
         etiquetas,
         nombre_comun,
         nombre_cientifico,
@@ -19,20 +82,27 @@ const crearFicha = async (req, res) => {
         caracteristicas_especiales,
         polemica
     } = req.body;
-
+    let arrayImg = [];
     //Crear las etiquetas y guardarlas en la bd
     guardarEtiquetasBD(etiquetas, nombre_comun, nombre_cientifico);
 
-    //Agregar los id de las etiquetas a el modelo de Ficha
-    /* let existeEtiqueta;
-    let arrayIdEtiquetas = [];
-    etiquetasGuardadas.forEach(async e => {
-        existeEtiqueta = await Etiqueta.findOne({ etiqueta: e });
-        arrayIdEtiquetas.push(existeEtiqueta._id);
-    }); */
-    //etiquetas = arrayIdEtiquetas;
+    const { tempFilePath } = req.files.archivo;
+    const { secure_url } = await cloudinary.uploader.upload(tempFilePath);
+    console.log(secure_url);
+    arrayImg.push(secure_url);
+
+
+    Ficha.imagenes = arrayImg;
+    await Ficha.findByIdAndUpdate(id, {
+        $push: {
+            'imagenes': arrayImg
+
+        }
+    })
+
 
     const ficha = new Ficha({
+        imagenes,
         etiquetas,
         nombre_comun,
         nombre_cientifico,
@@ -56,11 +126,15 @@ const crearFicha = async (req, res) => {
 
 }
 
+
 //Crear las etiquetas y guardarlas en la bd
 const guardarEtiquetasBD = async (etiquetas, nombreCo, nombreCien) => {
 
     let etiquetaFor;
     let existenciaEtiqueta;
+
+
+
     etiquetas.push(nombreCo);
     etiquetas.push(nombreCien)
     etiquetas.forEach(async e => {
@@ -83,7 +157,7 @@ const guardarEtiquetasBD = async (etiquetas, nombreCo, nombreCien) => {
 const getFichaId = async (req, res) => {
 
     const { id } = req.params;
-    const ficha = await Ficha.findById(id).populate("comentarios.id_usuario", 'username');
+    const ficha = await Ficha.findById(id);
 
     res.json({
         ficha
@@ -177,5 +251,7 @@ module.exports = {
     conseguirFichasDeUsuario,
     guardarFicha,
     eliminarFichaGuardada,
-    conseguirFichasGuardadasUsuario
+    conseguirFichasGuardadasUsuario,
+    actualizarImg,
+    //cargarArchivo
 }

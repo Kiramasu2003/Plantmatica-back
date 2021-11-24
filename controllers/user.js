@@ -5,6 +5,49 @@ const { getTemplate, sendEmail } = require('../config/mail');
 const { validarJWT } = require('../middlewares/validar-jwt');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const cloudinary = require('cloudinary').v2;
+const { response } = require('express');
+const path = require('path');
+const fs = require('fs');
+
+cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_KEY,
+    api_secret: process.env.CLOUDINARY_SECRET,
+    secure: true
+});
+
+const agregarFotoUser = async (req, res) => {
+
+    const { id } = req.params;
+
+    let arrayImg = [];
+    try {
+        //ficha.imagenes
+
+        const { tempFilePath } = req.files.archivo;
+        const { secure_url } = await cloudinary.uploader.upload(tempFilePath);
+        arrayImg.push(secure_url);
+
+
+        User.imagenes = arrayImg;
+        await User.findByIdAndUpdate(id, {
+            $push: {
+                'fotoPerfil': arrayImg
+
+            }
+        })
+
+        res.json({
+            msg: 'img agregada correctamente'
+        });
+    } catch (error) {
+        res.json({
+            msg: 'img no fue agregada, hay un error',
+            err: error.msg
+        })
+    }
+}
 
 const crearCuenta = async (req, res) => {
 
@@ -12,6 +55,19 @@ const crearCuenta = async (req, res) => {
         const { username,/* agregue fotoPerfi*/ fotoPerfil, correo, password, estadoMx, sexo, edad } = req.body;
 
         //generar codigo
+
+        const { tempFilePath } = req.files.archivo;
+        const { secure_url } = await cloudinary.uploader.upload(tempFilePath);
+        arrayImg.push(secure_url);
+
+        User.imagenes = arrayImg;
+        await User.findByIdAndUpdate(id, {
+            $push: {
+                'fotoPerfil': arrayImg
+
+            }
+        });
+
         const code = uuidv4();
         const user = new User({ username,/* agregue fotoPerfi*/ fotoPerfil, correo, password, estadoMx, sexo, edad, code });
 
@@ -112,7 +168,7 @@ const confirmarCrearCuenta = async (req, res) => {
             msg: 'Su sesion a expirado.'
         });
     }
-    
+
     try {
 
         const { uid } = jwt.verify(token, process.env.SECRETORPUBLICKEY);
@@ -157,5 +213,6 @@ module.exports = {
     getUsuario,
     deleteUsuario,
     actualizarDatosUsuario,
-    confirmarCrearCuenta
+    confirmarCrearCuenta,
+    agregarFotoUser
 }

@@ -4,10 +4,15 @@ const app = express();
 const cors = require('cors');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
+const fileUpload = require('express-fileupload');
 
 app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
+app.use(fileUpload({
+    useTempFiles: true,
+    temFileFir: '/tmp/'
+}));
 
 try {
 
