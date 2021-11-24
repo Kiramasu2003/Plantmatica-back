@@ -5,11 +5,12 @@ const { getTemplate, sendEmail } = require('../config/mail');
 const { validarJWT } = require('../middlewares/validar-jwt');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
-const cloudinary = require('cloudinary').v2;
+//const cloudinary = require('cloudinary').v2;
 const { response } = require('express');
 const path = require('path');
 const fs = require('fs');
 
+/*
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
     api_key: process.env.CLOUDINARY_KEY,
@@ -47,15 +48,15 @@ const agregarFotoUser = async (req, res) => {
             err: error.msg
         })
     }
-}
+}*/
 
 const crearCuenta = async (req, res) => {
 
     try {
-        const { username,/* agregue fotoPerfi*/ fotoPerfil, correo, password, estadoMx, sexo, edad } = req.body;
+        const { username,/* agregue fotoPerfi/ fotoPerfil*/ correo, password, estadoMx, sexo, edad } = req.body;
 
         //generar codigo
-
+        /*
         const { tempFilePath } = req.files.archivo;
         const { secure_url } = await cloudinary.uploader.upload(tempFilePath);
         arrayImg.push(secure_url);
@@ -66,7 +67,7 @@ const crearCuenta = async (req, res) => {
                 'fotoPerfil': arrayImg
 
             }
-        });
+        });*/
 
         const code = uuidv4();
         const user = new User({ username,/* agregue fotoPerfi*/ fotoPerfil, correo, password, estadoMx, sexo, edad, code });
@@ -104,7 +105,7 @@ const crearCuenta = async (req, res) => {
 const actualizarDatosUsuario = async (req, res) => {
 
     const { id } = req.params;
-    const { _id, correo,/* agregue fotoPerfi*/ fotoPerfil, password, state, rol, reportes, ...dataResto } = req.body;
+    const { _id, correo,/* agregue fotoPerfi* fotoPerfil,*/password, state, rol, reportes, ...dataResto } = req.body;
 
     const usuario = await User.findById(id);
     if (!usuario) {
@@ -214,5 +215,5 @@ module.exports = {
     deleteUsuario,
     actualizarDatosUsuario,
     confirmarCrearCuenta,
-    agregarFotoUser
+    //agregarFotoUser
 }

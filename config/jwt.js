@@ -2,11 +2,11 @@ const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 
 const generarJWT = (uid = '') => {
-    
+
     return new Promise((resolve, reject) => {
-        
+
         const payLoad = { uid };
-        
+
         jwt.sign(payLoad, process.env.SECRETORPUBLICKEY, {
             expiresIn: '4h'
         }, (err, token) => {
@@ -17,11 +17,11 @@ const generarJWT = (uid = '') => {
             } else {
                 resolve(token);
             }
-            
+
         })
 
     });
-    
+
 }
 
 const getToken = (payload) => {

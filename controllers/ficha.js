@@ -2,9 +2,9 @@
 const Ficha = require('../models/FichaPlanta');
 const Etiqueta = require('../models/Etiquetas');
 const User = require('../models/User');
-const cloudinary = require('cloudinary').v2;// .v2 =version 2
+//const cloudinary = require('cloudinary').v2;// .v2 =version 2
 const { response } = require('express');
-
+/*
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
     api_key: process.env.CLOUDINARY_KEY,
@@ -30,7 +30,7 @@ cloudinary.config({
 
         res.json({ msg: 'File uploaded to ' + uploadPath })
     });
-}*/
+}*
 
 const actualizarImg = async (req, res) => {
 
@@ -63,12 +63,12 @@ const actualizarImg = async (req, res) => {
             err: error.msg
         })
     }
-}
+}*/
 
 const crearFicha = async (req, res) => {
 
     let {
-        imagenes,
+        //imagenes,
         etiquetas,
         nombre_comun,
         nombre_cientifico,
@@ -82,6 +82,7 @@ const crearFicha = async (req, res) => {
         caracteristicas_especiales,
         polemica
     } = req.body;
+    /*
     let arrayImg = [];
     //Crear las etiquetas y guardarlas en la bd
     guardarEtiquetasBD(etiquetas, nombre_comun, nombre_cientifico);
@@ -98,7 +99,7 @@ const crearFicha = async (req, res) => {
             'imagenes': arrayImg
 
         }
-    })
+    })*/
 
 
     const ficha = new Ficha({
@@ -252,6 +253,6 @@ module.exports = {
     guardarFicha,
     eliminarFichaGuardada,
     conseguirFichasGuardadasUsuario,
-    actualizarImg,
+    //actualizarImg,
     //cargarArchivo
 }
