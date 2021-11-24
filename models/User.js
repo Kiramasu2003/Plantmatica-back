@@ -8,10 +8,6 @@ const UserSchema = mongoose.Schema({
         required: [true, 'username is required'],
         unique: true
     },
-    //fotoPerfil: {
-    //    type: String,
-    //    default: 'https://res.cloudinary.com/tucan-s-software-plantmatica/image/upload/v1637716682/DefaultUser_q9afm4.png'
-    //},
     correo: {
         type: String,
         required: [true, 'El correo es obligatorio'],
@@ -127,3 +123,4 @@ const UserSchema = mongoose.Schema({
 });
 
 module.exports = mongoose.model('User', UserSchema);
+

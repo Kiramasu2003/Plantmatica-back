@@ -1,89 +1,32 @@
 const bcryptjs = require('bcryptjs');
 const { v4: uuidv4 } = require('uuid');
 const { generarJWT } = require('../config/jwt');
-//const { getTemplate, sendEmail } = require('../config/mail');
+const { getTemplate, sendEmail } = require('../config/mail');
 const { validarJWT } = require('../middlewares/validar-jwt');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
-//const cloudinary = require('cloudinary').v2;
-const { response } = require('express');
-const path = require('path');
-const fs = require('fs');
-
-/*
-cloudinary.config({
-    cloud_name: process.env.CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_KEY,
-    api_secret: process.env.CLOUDINARY_SECRET,
-    secure: true
-});
-
-const agregarFotoUser = async (req, res) => {
-
-    const { id } = req.params;
-
-    let arrayImg = [];
-    try {
-        //ficha.imagenes
-
-        const { tempFilePath } = req.files.archivo;
-        const { secure_url } = await cloudinary.uploader.upload(tempFilePath);
-        arrayImg.push(secure_url);
-
-
-        User.imagenes = arrayImg;
-        await User.findByIdAndUpdate(id, {
-            $push: {
-                'fotoPerfil': arrayImg
-
-            }
-        })
-
-        res.json({
-            msg: 'img agregada correctamente'
-        });
-    } catch (error) {
-        res.json({
-            msg: 'img no fue agregada, hay un error',
-            err: error.msg
-        })
-    }
-}*/
 
 const crearCuenta = async (req, res) => {
 
     try {
-        const { username,/* agregue fotoPerfi/ fotoPerfil*/ correo, password, estadoMx, sexo, edad } = req.body;
+        const { username, correo, password, estadoMx, sexo, edad } = req.body;
 
         //generar codigo
-        /*
-        const { tempFilePath } = req.files.archivo;
-        const { secure_url } = await cloudinary.uploader.upload(tempFilePath);
-        arrayImg.push(secure_url);
-
-        User.imagenes = arrayImg;
-        await User.findByIdAndUpdate(id, {
-            $push: {
-                'fotoPerfil': arrayImg
-
-            }
-        });*/
-
         const code = uuidv4();
-        const user = new User({ username,/* agregue fotoPerfi*/ fotoPerfil, correo, password, estadoMx, sexo, edad, code });
+        const user = new User({ username, correo, password, estadoMx, sexo, edad, code });
 
         /* Generar webToken */
         const token = await generarJWT(code);
 
         /* Obtener template */
         const template = getTemplate(username, token);
-        /*
+
         try {
-            /* Enviar email 
-                        await sendEmail(correo, 'Correo de verificacion', template);
+            /* Enviar email */
+            await sendEmail(correo, 'Correo de verificacion', template);
         } catch (error) {
             console.log(error)
-        }*/
+        }
 
         const salt = bcryptjs.genSaltSync();
         user.password = bcryptjs.hashSync(password, salt);
@@ -105,7 +48,7 @@ const crearCuenta = async (req, res) => {
 const actualizarDatosUsuario = async (req, res) => {
 
     const { id } = req.params;
-    const { _id, correo,/* agregue fotoPerfi* fotoPerfil,*/password, state, rol, reportes, ...dataResto } = req.body;
+    const { _id, correo, password, state, rol, reportes, ...dataResto } = req.body;
 
     const usuario = await User.findById(id);
     if (!usuario) {
@@ -169,7 +112,7 @@ const confirmarCrearCuenta = async (req, res) => {
             msg: 'Su sesion a expirado.'
         });
     }
-
+    
     try {
 
         const { uid } = jwt.verify(token, process.env.SECRETORPUBLICKEY);
@@ -214,6 +157,5 @@ module.exports = {
     getUsuario,
     deleteUsuario,
     actualizarDatosUsuario,
-    confirmarCrearCuenta,
-    //agregarFotoUser
+    confirmarCrearCuenta
 }
