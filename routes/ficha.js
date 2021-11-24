@@ -1,7 +1,7 @@
 //Modulo de fichas para los usuarios
 const { Router } = require('express');
 const { check } = require('express-validator');
-const { crearFicha, conseguirTodasLasFichas, getFichaId, conseguirFichasDeUsuario, guardarFicha, eliminarFichaGuardada, conseguirFichasGuardadasUsuario } = require('../controllers/ficha');
+const { crearFicha, conseguirTodasLasFichas, getFichaId, conseguirFichasDeUsuario, guardarFicha, eliminarFichaGuardada, conseguirFichasGuardadasUsuario, actualizarImg, /*cargarArchivo*/ } = require('../controllers/ficha');
 const { getEtiquetas, buscarCoincidencias } = require('../controllers/search');
 //Controladores
 const { existeUserID } = require('../helpers/validar-datos-user');
@@ -15,6 +15,7 @@ router.post('/', [
     validarJWT,
     //check('etiquetas').custom(validarEtiquetas),
     check('complemento', 'El complemento no puede ir vacio').notEmpty(),
+    check('imagen', 'Es necesario tener una imagen como referencia').notEmpty(),
     check('nombre_comun', 'El nombre comun es obligatorio').notEmpty().custom(validarExistNombreComun),
     check('nombre_cientifico', 'El nombre cientifico es obligatorio').notEmpty().custom(validarExistNombreCientifico),
     check('descripcion', 'La descripcion es un campo obligatorio').notEmpty(),
@@ -68,6 +69,13 @@ router.get('/buscar/etiquetas', getEtiquetas);
 router.put('/encontrar/coincidencia/', [
     check('termino', 'El termino de busqueda no puede ir vacio').notEmpty(),
     validarDatos
-],  buscarCoincidencias);
+], buscarCoincidencias);
+
+router.put('/:id/agregarimg/', [
+    check('id', 'No es un ID valido').isMongoId().custom(existeFichaId),
+    validarDatos
+], actualizarImg);
+
+//router.post('/upload', cargarArchivo);
 
 module.exports = router;
