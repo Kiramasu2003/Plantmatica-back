@@ -20,7 +20,6 @@
   "homepage": "https://github.com/addRian0-0/5IV9-PlantMatica-Backend#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "cloudinary": "^1.27.1",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
@@ -29,7 +28,6 @@
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.1.4",
     "mongoose": "^6.0.8",
-    "nodemailer": "^6.7.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

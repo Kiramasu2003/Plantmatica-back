@@ -21,13 +21,6 @@ const crearCuenta = async (req, res) => {
         /* Obtener template */
         const template = getTemplate(username, token);
 
-        try {
-            /* Enviar email */
-            await sendEmail(correo, 'Correo de verificacion', template);
-        } catch (error) {
-            console.log(error)
-        }
-
         const salt = bcryptjs.genSaltSync();
         user.password = bcryptjs.hashSync(password, salt);
 
